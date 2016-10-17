@@ -36,6 +36,29 @@ class GrapevineSpider(scrapy.Spider):
                 'posts' : extracted_posts
             }
 
+        category_links = response.css("ul.sub-menu li a::attr(href)").extract()
+        for category_link in category_links:
+            if category_link is not None:
+                yield scrapy.Request(category_link, callback=self.parse_category)
+
+    # parse the category page
+    def parse_category(self, response):
+        item_detail_links = response.css("div.item-details div.more-link-wrap a::attr(href)").extract()
+        for item_detail_link in item_detail_links:
+            if item_detail_link is not None:
+                yield scrapy.Request(item_detail_link, callback=self.parse_article)
+
+        page_nav_links = response.css("div.page-nav a::attr(href)").extract()
+        for page_nav_link in page_nav_links:
+            if page_nav_link is not None:
+                yield scrapy.Request(page_nav_link, callback=self.parse_category)
+
+    # parse artist page
+
+
+    # parse calendar page
+
+
     def parse_article(self, response):
         def extract_with_css(query):
             return response.css(query).extract_first().strip()
