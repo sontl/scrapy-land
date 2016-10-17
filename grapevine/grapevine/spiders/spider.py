@@ -3,12 +3,13 @@ import scrapy
 
 
 class GrapevineSpider(scrapy.Spider):
-    name = "example"
+    name = "grapevine"
     allowed_domains = ["hanoigrapevine.com"]
     start_urls = (
         'http://www.hanoigrapevine.com/',
     )
 
+    # parse the main page
     def parse(self, response):
         for category_block in response.css("div.td_block_wrap"):
             category_label = category_block.css("h4.block-title a::text").extract_first()
@@ -29,6 +30,7 @@ class GrapevineSpider(scrapy.Spider):
                 if next_article_page is not None:
                     yield scrapy.Request(next_article_page, callback=self.parse_article)
             
+            # return data to output file
             yield {
                 'category_label' : category_label,
                 'posts' : extracted_posts
@@ -52,16 +54,25 @@ class GrapevineSpider(scrapy.Spider):
 
         filename = 'article-%s.html' % output.get('id')
         with open(filename, 'wb') as f:
+            # define header to set charset UTF-8 to the page
             html_header = '''<head>
                                 <meta charset="UTF-8">
                             </head>'''
+            # write to the html file for each article
+            # need to encode the content because it's in html format
             f.write(u' '.join((html_header, output.get('content'))).encode('utf-8').strip())
         yield output
 
+        # for the article has continue reading links
         continue_reading_links = output.get('continue_reading_links')
         for next_article_page in continue_reading_links:
             if next_article_page is not None:
                 yield scrapy.Request(next_article_page, callback=self.parse_article)
 
-        
+        # go to related links
+        links_in_sidebar = response.css("div.td-post-sidebar div.td_block_wrap div.td_block_inner div.td_mod_wrap div.item-details h3 a::attr(href)").extract()
+        for link in links_in_sidebar:
+            if link is not None:
+                yield scrapy.Request(link, callback=self.parse_article)
+
         
