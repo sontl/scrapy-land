@@ -52,9 +52,11 @@ DOWNLOAD_DELAY = 1.5
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'bds.middlewares.MyCustomDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+    'scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware': None,
+    'random_useragent.RandomUserAgentMiddleware': 400
+}
+USER_AGENT_LIST = "bds/useragents.txt"
 
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
