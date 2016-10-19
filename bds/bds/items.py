@@ -14,8 +14,16 @@ class BdsItem(scrapy.Item):
     pass
 
 class Property(scrapy.Item):
-    id = scrapy.Field()
+    code = scrapy.Field()
     created_date = scrapy.Field()
     price = scrapy.Field()
     square = scrapy.Field()
     title = scrapy.Field()
+    project_url = scrapy.Field() # in full path
+    url = scrapy.Field() # in full path
+    
+class Project(scrapy.Item):
+    code = scrapy.Field()
+    created_date = scrapy.Field()
+    url = scrapy.Field() # in full path
+    

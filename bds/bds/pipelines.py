@@ -6,6 +6,8 @@
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import pymongo
 from scrapy.conf import settings
+from bds.items import Property
+from bds.items import Project
 
 class BdsPipeline(object):
     def process_item(self, item, spider):
@@ -14,15 +16,13 @@ class BdsPipeline(object):
 
 class MongoPipeline(object):
     
-    collection_name = "scrapy_items"
+    property_collection_name = "properties"
+    project_collection_name = "projects"
     
     def __init__(self, mongo_url, mongo_db, mongo_port):
         self.mongo_url = mongo_url
         self.mongo_db = mongo_db
         self.mongo_port = mongo_port
-        print self.mongo_url
-        print self.mongo_db
-        print self.mongo_port
         #self.mongo_collection = mongo_collection
     
     @classmethod
@@ -43,5 +43,10 @@ class MongoPipeline(object):
         self.client.close()
     
     def process_item(self, item, spider):
-        self.db[self.collection_name].insert(dict(item))
+        if isinstance(item, Property):
+            self.db[self.property_collection_name].insert(dict(item))
+        elif isinstance(item, Project):
+            self.db[self.project_collection_name].insert(dict(item))
+        else: 
+            self.db[self.property_collection_name].insert(dict(item))
         return item

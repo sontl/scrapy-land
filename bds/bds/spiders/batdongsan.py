@@ -2,6 +2,7 @@
 import scrapy
 import pymongo
 from bds.items import Property
+from bds.items import Project
 
 nha_dat_ban = "nha-dat-ban"
 nha_dat_cho_thue = "nha-dat-cho-thue"
@@ -30,17 +31,25 @@ class BatdongsanSpider(scrapy.Spider):
             
                 if page == nha_dat_ban or page == nha_dat_cho_thue:
                     yield scrapy.Request(url, callback=self.parse_property)
-                else:
+                elif page == du_an_bat_dong_san:
                     yield scrapy.Request(url, callback=self.parse_project)
         
     def parse_property(self, response):
         product_detail = response.css("div#product-detail")
         title = product_detail.css("div.pm-title h1::text").extract_first()
-        more_details = product_detail.css("div.kqchitiet span span strong::text").extract_first()
-        property = Property(title=title, price=more_details)
+        more_details = product_detail.css("div.kqchitiet span span strong::text").extract()
+        property = Property(
+                        url = response.url,
+                        project_url = response.urljoin(product_detail.css("span.diadiem-title a::attr(href)").extract_first()),
+                        title = title.replace('\n', '').replace('\r', '').strip(), 
+                        price = more_details[0].replace('\n', '').replace('\r', '').strip(),
+                        square = more_details[1].replace('\n', '').replace('\r', '').strip()
+                    )
         yield dict(property)
         
         
         
     def parse_project(self, response):
-        pass
+        project = Project(
+                    url = response.url
+                )
