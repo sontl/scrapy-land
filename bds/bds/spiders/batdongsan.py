@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
-from Property import *
 import pymongo
+from bds.items import Property
 
 nha_dat_ban = "nha-dat-ban"
 nha_dat_cho_thue = "nha-dat-cho-thue"

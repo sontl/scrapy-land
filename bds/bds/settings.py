@@ -69,10 +69,10 @@ ITEM_PIPELINES = {
 }
 
 # Mongodb Info
-MONGO_URI = 'ds047198.mlab.com:47198'
+MONGO_URL = 'ds047198.mlab.com'
 MONGO_DATABASE = 'sontl'
 MONGO_PORT = 47198
-MONGODB_COLLECTION = 'properties'
+MONGO_COLLECTION = 'properties'
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
