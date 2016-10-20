@@ -53,12 +53,19 @@ class BatdongsanSpider(scrapy.Spider):
         title = product_detail.css("div.pm-title h1::text").extract_first()
         more_details = product_detail.css("div.kqchitiet span span strong::text").extract()
         project_url = product_detail.css("span.diadiem-title a::attr(href)").extract_first()
+        origin_id = product_detail.css("div.pm-content.stat::attr(cid)").extract_first()
+        
+        features = response.css("div.left-detail div div.right::text").extract()
+        created_date = features[4]
+        
         property = Property(
                         url = response.url,
                         project_url = response.urljoin(project_url),
                         title = clean_text(title), 
                         price = clean_text(more_details[0]),
-                        square = clean_text(more_details[1])
+                        square = clean_text(more_details[1]),
+                        origin_id = clean_text(origin_id),
+                        created_date = clean_text(created_date)
                     )
         yield property
         

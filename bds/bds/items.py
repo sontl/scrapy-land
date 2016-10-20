@@ -14,6 +14,7 @@ class BdsItem(scrapy.Item):
     pass
 
 class Property(scrapy.Item):
+    origin_id = scrapy.Field()
     code = scrapy.Field()
     created_date = scrapy.Field()
     price = scrapy.Field()
