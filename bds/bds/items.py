@@ -26,4 +26,7 @@ class Project(scrapy.Item):
     code = scrapy.Field()
     created_date = scrapy.Field()
     url = scrapy.Field() # in full path
+    name = scrapy.Field()
+    other_name = scrapy.Field()
+    
     

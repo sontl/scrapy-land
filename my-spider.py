@@ -11,7 +11,7 @@ class LandSpider(scrapy.Spider):
             yield {'title': title.css('a ::text').extract_first()}
 
         next_page = response.css('div.prev-post > a ::attr(href)').extract_first()
-        if next_page:
+        if next_page:   
             yield scrapy.Request(response.urljoin(next_page), callback=self.parse)
  
         
