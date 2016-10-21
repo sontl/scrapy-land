@@ -44,9 +44,21 @@ class MongoPipeline(object):
     
     def process_item(self, item, spider):
         if isinstance(item, Property):
-            self.db[self.property_collection_name].insert(dict(item))
+            properties_coll = self.db[self.property_collection_name]
+            existing_record = properties_coll.find_one({
+                                    "origin_id": item.get("origin_id"),
+                                    "url" : item.get("url")
+                                })
+            if existing_record is None:
+                print "-" * 40
+                print "new record. Inserting to database"
+                print "-" * 40
+                properties_coll.insert(dict(item))
+            else:
+                print "Record is existing in database"
         elif isinstance(item, Project):
-            self.db[self.project_collection_name].insert(dict(item))
+            projects_coll = self.db[self.project_collection_name]
+            projects_coll.insert(dict(item))
         else: 
             self.db[self.property_collection_name].insert(dict(item))
         return item

@@ -17,6 +17,7 @@ def clean_text(text):
 
 class BatdongsanSpider(scrapy.Spider):
     name = "batdongsan"
+
     # allowed_domains = ["batdongsan.com.vn"]
     
     # custom_settings = {
