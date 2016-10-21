@@ -26,6 +26,8 @@ class Property(scrapy.Item):
     address = scrapy.Field()
     post_type = scrapy.Field()
     contact_info = scrapy.Field()
+    content = scrapy.Field()
+    extra_content = scrapy.Field()
     
     
 class Project(scrapy.Item):

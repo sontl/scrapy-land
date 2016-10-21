@@ -62,7 +62,7 @@ class BatdongsanSpider(scrapy.Spider):
         more_details = product_detail.css("div.kqchitiet span span strong::text").extract()
         project_url = product_detail.css("span.diadiem-title a::attr(href)").extract_first()
         origin_id = product_detail.css("div.pm-content.stat::attr(cid)").extract_first()
-        
+        content = product_detail.css("div.pm-content").extract_first()
         features = response.css("div.left-detail div div.right::text").extract()
         address = features[1]
         post_type = features[3]
@@ -72,7 +72,7 @@ class BatdongsanSpider(scrapy.Spider):
         contact_name = response.css("div#LeftMainContent__productDetail_contactName div.right::text").extract_first()
         contact_mobile = response.css("div#LeftMainContent__productDetail_contactMobile div.right::text").extract_first()
         contact_phone = response.css("div#LeftMainContent__productDetail_contactPhone div.right::text").extract_first()
-        contact_email = response.css("div#LeftMainContent__productDetail_contactEmail div.right::text").extract_first()
+        contact_email = response.css("div#LeftMainContent0e05fc061426e8ce153b00323aad41525656ab3b__productDetail_contactEmail div.right::text").extract_first()
         contact_address = response.css("div#LeftMainContent__productDetail_contactAddress div.right::text").extract_first()
         contact_info = {
             "name" : clean_text(contact_name),
@@ -81,6 +81,11 @@ class BatdongsanSpider(scrapy.Spider):
             "phone" : clean_text(contact_phone),
             "email" : clean_text(contact_email)
         }
+        
+        similar_product_list = response.css("div#lstProductSimilar div div.p-title a::attr(href)").extract()
+        for similar_product_url in similar_product_list:
+            if similar_product_url is not None:
+                yield scrapy.Request(response.urljoin(similar_product_url), callback=self.parse_property)
         
         property = Property(
                         url = response.url,
@@ -93,7 +98,8 @@ class BatdongsanSpider(scrapy.Spider):
                         expiry_date = clean_text(expiry_date),
                         post_type = clean_text(post_type),
                         address = clean_text(address),
-                        contact_info = contact_info
+                        contact_info = contact_info,
+                        content = content
                     )
         yield property
         
