@@ -14,16 +14,22 @@ class BdsItem(scrapy.Item):
     pass
 
 class Property(scrapy.Item):
-    origin_id = scrapy.Field()
+    origin_id = scrapy.Field() # id created by the owner website
     code = scrapy.Field()
-    created_date = scrapy.Field()
+    created_date = scrapy.Field() # the date that this product is posted
+    expiry_date = scrapy.Field()
     price = scrapy.Field()
     square = scrapy.Field()
     title = scrapy.Field()
-    project_url = scrapy.Field() # in full path
-    url = scrapy.Field() # in full path
+    project_url = scrapy.Field() # url of the similar products
+    url = scrapy.Field() # url of the crawled page in full path
+    address = scrapy.Field()
+    post_type = scrapy.Field()
+    contact_info = scrapy.Field()
+    
     
 class Project(scrapy.Item):
+    origin_id = scrapy.Field() # id created by the owner website
     code = scrapy.Field()
     created_date = scrapy.Field()
     url = scrapy.Field() # in full path
