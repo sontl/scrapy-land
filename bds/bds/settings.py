@@ -67,7 +67,8 @@ USER_AGENT_LIST = "bds/useragents.txt"
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'bds.pipelines.MongoPipeline': 300,
+    'bds.pipelines.DynamoPipeline': 300,
+    'bds.pipelines.MongoPipeline': 400
 }
 
 # Mongodb Info
