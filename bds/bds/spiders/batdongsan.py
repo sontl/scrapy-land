@@ -3,7 +3,8 @@ import scrapy
 import pymongo
 from bds.items import Property
 from bds.items import Project
-
+from scrapy.http import HtmlResponse
+from scrapy.http import Response
 nha_dat_ban = "nha-dat-ban"
 nha_dat_cho_thue = "nha-dat-cho-thue"
 du_an_bat_dong_san = "du-an-bat-dong-san"
@@ -32,7 +33,10 @@ class BatdongsanSpider(scrapy.Spider):
 
     def parse(self, response):
         page = response.url.split("/")
-        
+        #from scrapy.shell import inspect_response
+        #inspect_response(response, self)
+        if isinstance(response, Response):
+            response = HtmlResponse(url=response.url, body=response.body)
         if nha_dat_ban in page or nha_dat_cho_thue in page:
             property_detail_url = response.css("div.vip0.search-productItem div.p-title a::attr(href)").extract()
             
@@ -49,7 +53,8 @@ class BatdongsanSpider(scrapy.Spider):
                     yield scrapy.Request(url, callback=self.parse)
         
         elif du_an_bat_dong_san in page:
-            print '----------------response %r' %response
+            self.logger.warning('----------------response %s', response.css("div").extract_first())
+
             project_items = response.css("div.prj-items.prj-latest")
             project_details_links = project_items.css("ul li div.below-img div.prj-name a::attr(href)").extract()
         
@@ -58,6 +63,8 @@ class BatdongsanSpider(scrapy.Spider):
                     yield scrapy.Request(response.urljoin(project_link), callback=self.parse_project)
         
     def parse_property(self, response):
+        if isinstance(response, Response):
+            response = HtmlResponse(url=response.url, body=response.body)
         product_detail = response.css("div#product-detail")
         title = product_detail.css("div.pm-title h1::text").extract_first()
         more_details = product_detail.css("div.kqchitiet span span strong::text").extract()
@@ -105,6 +112,8 @@ class BatdongsanSpider(scrapy.Spider):
         yield property
         
     def parse_project(self, response):
+        if isinstance(response, Response):
+            response = HtmlResponse(url=response.url, body=response.body)
         project_details = response.css("div.prj-detail")
         project_name = project_details.css("h1::text").extract_first()
         project_other_name = project_details.css("span.prj-othername::text").extract_first()
