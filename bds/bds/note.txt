@@ -1,0 +1,6 @@
+- Boto 3 setup for DynamoDB
+    configure secure key in ~/.boto
+    configure default aws region in ~/.aws/config
+- Need to prevent using Twisted > 16.7 with Scrapy1.3
+    pip uninstall Twisted
+    pip install Twisted==16.6

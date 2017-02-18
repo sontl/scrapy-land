@@ -49,7 +49,8 @@ class BatdongsanSpider(scrapy.Spider):
                     yield scrapy.Request(url, callback=self.parse)
         
         elif du_an_bat_dong_san in page:
-            project_items = response.css("div.prj-items")
+            print '----------------response %r' %response
+            project_items = response.css("div.prj-items.prj-latest")
             project_details_links = project_items.css("ul li div.below-img div.prj-name a::attr(href)").extract()
         
             for project_link in project_details_links:
