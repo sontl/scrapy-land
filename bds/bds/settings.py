@@ -67,15 +67,17 @@ USER_AGENT_LIST = "bds/useragents.txt"
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'bds.pipelines.DynamoPipeline': 300,
+    #'bds.pipelines.DynamoPipeline': 300,
     'bds.pipelines.MongoPipeline': 400
 }
 
 # Mongodb Info
-MONGO_URL = 'ds047198.mlab.com'
-MONGO_DATABASE = 'sontl'
-MONGO_PORT = 47198
+MONGO_URL = 'localhost'
+MONGO_DATABASE = 'bds'
+MONGO_PORT = 27017
 MONGO_COLLECTION = 'properties'
+MONGO_USER = 'sontl'
+MONGO_PASSWORD = '12345688'
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
